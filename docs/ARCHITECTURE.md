@@ -1,0 +1,1 @@
+# Polished architecture notes in README.
