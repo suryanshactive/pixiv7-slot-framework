@@ -1,5 +1,5 @@
 
-# PixiJS v7 Slot Framework (Polished)
+# PixiJS v7 Slot Framework
 
 Run:
 ```bash
