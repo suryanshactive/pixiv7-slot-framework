@@ -12,5 +12,12 @@
   "freeSpinsCount": 5,
   "betOptions": [1, 2, 5, 10],
   "defaultBet": 1,
-  "freeSpinsAwardEvery": 5
+  "freeSpinsAwardEvery": 5,
+  "spin": {
+    "minSpinMs": 1000,
+    "decelMs": 100,
+    "startStaggerMs": 50,
+    "stopStaggerMs": 100,
+    "lapsBeforeStop": 1
+  }
 }
