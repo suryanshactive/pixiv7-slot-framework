@@ -17,7 +17,6 @@ export class Game {
         game: new PIXI.Container(),
         background: new PIXI.Container(),
         reels: new PIXI.Container(),
-        winLayer: new PIXI.Container(),
         hud: new PIXI.Container(),
     };
 
@@ -28,8 +27,7 @@ export class Game {
 
     private reelEngine: ReelEngine;
 
-    private spinService: SpinService
-    // private stateMachine = new StateMachine();
+    private spinService: SpinService;
 
     private controllers: Array<{ update?: (delta: number) => void }> = [];
 
@@ -56,14 +54,12 @@ export class Game {
         // The game container holds content authored in design units (scaled/centered on resize)
         app.stage.addChild(this.containers.game);
         this.containers.game.addChild(this.containers.reels);
-        this.containers.game.addChild(this.containers.winLayer);
         this.containers.game.addChild(this.containers.hud);
 
         // --- Background (full viewport) ---
         this.rebuildBackground();
 
         // --- Services & controllers ---
-        // IMPORTANT: create SpinService here (not at field declaration) so config is defined
         this.spinService = new SpinService(config);
 
         // Reel engine in design space
@@ -74,7 +70,7 @@ export class Game {
         // HUD (designed for designW width)
         const hud = new HUD(this.designW);
         this.containers.hud.addChild(hud);
-        this.containers.hud.y = 20;
+        this.containers.hud.y = 5;
         this.containers.hud.x = 20;
 
         // Initial HUD snapshot
@@ -86,7 +82,7 @@ export class Game {
         });
 
         // State machine + controllers (event-driven)
-        const _stateMachine = new StateMachine(); // keep reference if you wish to inspect state
+        const _stateMachine = new StateMachine();
         const idle = new IdleStateController(this.spinService);
         const spinning = new SpinningStateController(this.reelEngine, () => this.lastResult);
         const result = new ResultStateController(() => this.lastResult);
@@ -149,8 +145,10 @@ export class Game {
         this.rebuildBackground();
 
         // Compute uniform scale to fit designW x designH into the window
-        const vw = this.app.renderer.width;
-        const vh = this.app.renderer.height;
+        this.designH = this.containers.game.height / this.containers.game.scale.y;
+        this.designW = this.containers.game.width / this.containers.game.scale.x;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
         const scale = Math.min(vw / this.designW, vh / this.designH);
 
         // Scale and center the game container

@@ -39,7 +39,7 @@ export class HUD extends PIXI.Container {
     this.spinButton = new PIXI.Container();
     const bg = new PIXI.Graphics();
     bg.beginFill(0x4ade80);
-    bg.drawRoundedRect(0, 0, 120, 44, 8);
+    bg.drawRoundedRect(0, 0, 120, 44, 50);
     bg.endFill();
 
     this.spinLabel = new PIXI.Text('SPIN', new PIXI.TextStyle({ fill: 0x0a0a0a, fontWeight: '700', fontSize: 16 }));
@@ -74,11 +74,11 @@ export class HUD extends PIXI.Container {
 
     events.on('STATE_CHANGED', ({ state }) => {
       this.isSpinning = (state === 'SPINNING' || state === 'RESULT');
-      this.updateSpinButtonState();
+      this.updateSpinButtonState(bg);
     });
 
     this.renderTexts();
-    this.updateSpinButtonState();
+    this.updateSpinButtonState(bg);
   }
 
   private spinEnabled() {
@@ -88,9 +88,12 @@ export class HUD extends PIXI.Container {
     return this.freeSpinsRemaining <= 0 && this.currentBalance >= this.currentBet;
   }
 
-  private updateSpinButtonState() {
+  private updateSpinButtonState(bg: PIXI.Graphics) {
     // Label
     this.spinLabel.text = this.isSpinning ? 'STOP' : 'SPIN';
+    this.isSpinning ? bg.beginFill(0xff0000) : bg.beginFill(0x4ade80);
+    bg.drawRoundedRect(0, 0, 120, 44, 50);
+    bg.endFill();
     // Visual enabled state only relevant for SPIN
     const enableSpin = !this.isSpinning && this.spinEnabled();
     this.spinButton.alpha = (this.isSpinning || enableSpin) ? 1 : 0.5;

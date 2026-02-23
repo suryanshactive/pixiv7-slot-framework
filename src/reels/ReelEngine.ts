@@ -54,6 +54,7 @@ export class ReelEngine extends PIXI.Container {
     for (let r = 0; r < cols; r++) {
       const reelC = new PIXI.Container();
       reelC.x = r * (this.symbolW + this.gap);
+      reelC.y = 0;
       this.addChild(reelC);
 
       const sprites: PIXI.Sprite[] = [];
@@ -95,6 +96,7 @@ export class ReelEngine extends PIXI.Container {
   layoutCenter(containerWidth: number) {
     const reelsWidth = this.config.reels * (this.symbolW + this.gap) - this.gap;
     this.x = Math.round((containerWidth - reelsWidth) / 2);
+    this.y = 100;
   }
 
   startSpin() {
